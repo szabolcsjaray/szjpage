@@ -1,13 +1,117 @@
 html {
     height: 90%;
 }
+
 body{
     background-color: black;
 }
 
+* {
+    margin:0;
+    padding:0;
+}
 
-* { margin:0; padding:0; } /* to remove the top and left whitespace */
+html, body {
+    width:100%;
+    height:100%;
+    overflow: hidden;
+}
 
-html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+canvas {
+    display:block;
+    position: absolute;
+    top:0px;
+    left:0px;
+ }
 
-canvas { display:block; }
+ div.nameDiv {
+     position:absolute;
+     color: white;
+ }
+
+ div#buttons {
+    position:absolute;
+    top: 20px;
+    left: 20px;
+}
+
+
+ div.buttonDiv {
+    border-radius: 14px;
+    background-color: rgb(59, 131, 107);
+    padding: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-color:rgb(34, 63, 53);
+    border-width: 4px;
+    border-style: solid;
+    margin-left:5px;
+    display: inline-block;
+    cursor:pointer;
+ }
+
+ div.active {
+     background-color: aquamarine;
+ }
+
+ div#descr {
+     display:none;
+     position:absolute;
+     top: 70px;
+     left:20px;
+     margin:auto;
+     width:30%;
+     opacity: 70%;
+     background-color:cadetblue;
+     border-color:rgb(34, 63, 53);
+     color:white;
+     border-radius: 20px;
+     border-width: 10px;
+     padding: 5px;
+     border-style:solid;
+
+ }
+
+ div#goto {
+     background-color:cyan;
+     border-color:cadetblue;
+     border-radius: 20px;
+     border-width: 10px;
+     border-style:solid;
+     padding: 3px;
+     display:inline-block;
+     opacity:100%;
+     margin:auto;
+     color: black;
+     cursor:pointer;
+}
+div#goto:hover {
+    opacity: 100%;
+    background-color: rgb(185, 255, 255);
+}
+
+div#title {
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 100%;;
+}
+div#pagetext {
+    opacity: 100%;;
+}
+
+div#closediv {
+    position:absolute;
+    top:5px;
+    left:95%;
+    background-color: #eb5252;
+    border-color:cadetblue;
+    border-radius: 20px;
+    border-width: 0px;
+    border-style:solid;
+    padding: 3px;
+    cursor: pointer;
+}
+
+div#closediv:hover {
+    background-color: #fd1111;
+}

@@ -11,7 +11,23 @@
          <script src="js/main.js"></script>
     </head>
     <body onload="start();">
-        <canvas id="cv1"></canvas>
+        <div id="div1">
+            <canvas id="cv1"></canvas>
+            <div id="buttons">
+                <div id='slow' class='buttonDiv' onclick='speed(this.id);'> > </div>
+                <div id='fast' class='buttonDiv active' onclick='speed(this.id);'> >> </div>
+                <div id='stop' class='buttonDiv' onclick='speed(this.id);'> || </div>
+            </div>
+            <div id="descr">
+                <div id='closediv' onclick='closeDesc();'>X</div>
+                <div id='title'>SBVHelper page</div>
+                <br>
+                <div id='pagetext'></div>
+                <br>
+                <div id='goto' onclick='gotoLink()'> &nbsp;go to&nbsp;
+                </div>
+            </div>
+        </div>
 
     </body>
 </html>
