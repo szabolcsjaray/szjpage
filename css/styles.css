@@ -29,6 +29,10 @@ canvas {
      color: white;
  }
 
+ div.hiddenDiv {
+     display : none;
+ }
+
  div#buttons {
     position:absolute;
     top: 20px;
@@ -60,7 +64,7 @@ canvas {
      top: 70px;
      left:20px;
      margin:auto;
-     width:30%;
+     width:25%;
      opacity: 70%;
      background-color:cadetblue;
      border-color:rgb(34, 63, 53);
@@ -114,4 +118,5 @@ div#closediv {
 
 div#closediv:hover {
     background-color: #fd1111;
+    color: rgb(255, 255, 154);
 }

@@ -6,6 +6,8 @@ var animationState = 0;
 const speeds = {'slow':0.2,'fast':1,'stop':0};
 var sysspeed = 1;
 var actPlanet = null;
+var namesOn = true;
+var nameDivs = [];
 
 var ps = [
     {
@@ -14,9 +16,9 @@ var ps = [
         'descr': 'A kit of tools for translating, adjusting, timing, and editing subtitles in SBV format.',
         'title': 'SBVHelper',
         'area' : 50,
-        'size' : 10,
-        'color' : '#0000F0',
-        'color2': '#B05050',
+        'size' : 20,
+        'color' : '#B05050',
+        'color2': '#201010',
         'link': 'sbv/sbvadjust.html',
         'canvas' : null,
         'fi': 0,
@@ -27,7 +29,7 @@ var ps = [
         'area' : 30,
         'size' : 15,
         'color' : '#AF20A0',
-        'color2': '#303070',
+        'color2': '#301040',
         'name': 'Visuals',
         'descr': 'Collection of different visual webpages, javascript programs.',
         'title': 'Visuals',
@@ -40,29 +42,44 @@ var ps = [
                 'size' : 12,
                 'area': 20,
                 'color' : '#209090',
-                'color2': '#B05050',
+                'color2': '#103040',
                 'name': 'Hexa',
                 'descr': 'Triangle based (hexagonal) labyrinth drawer visual.<br>'+
                          'Can be parametrized for draw different ways, with different colors.',
-                'title': 'Visuals',
+                'title': 'Hexagonal space',
                 'link': 'visual/hexa.html',
                 'canvas' : null,
                 'fi': 0
             },
             {
-                'orbit': 80,
+                'orbit': 70,
                 'size' : 11,
                 'area': 20,
-                'color' : '#001090',
-                'color2': '#0030B0',
+                'color' : '#0020B0',
+                'color2': '#000320',
                 'name': 'GravPic',
                 'link': 'visual/gravpic.html',
                 'descr': 'Gravity simulator.<br>'+
-                         'Calculates the move of masses, in their gravity field, with visualizing the gravity acceleration vectors.<br>'+
+                         'Calculates the move of masses, in their gravity field, with visualizing the gravity acceleration vectors as different colors.<br>'+
                          'Show the result as an animation.',
                 'title': 'Gravity Pictures',
                 'canvas' : null,
                 'fi': 0
+            },
+            {
+                'orbit': 90,
+                'size' : 11,
+                'area': 20,
+                'color' : '#205030',
+                'color2': '#001004',
+                'name': 'EqualP',
+                'link': 'visual/eqpoints/equal3d.html',
+                'descr': 'Equal points.<br>'+
+                         'Calculates a surface of points that has equal weighted distance summary from a set of points.<br>'+
+                         'Show the result as an animation. The red dot falling through has negative weight. Te animation is rotated.',
+                'title': 'Equal Points Surface',
+                'canvas' : null,
+                'fi': 1
             }
 
         ]
@@ -99,19 +116,30 @@ function resizeCanvas() {
         S = W;
     }
     drawBg(c2d);
+    nameDivs = [];
     draw(el('div1'), c2d, ps, canvasEl);
 }
 
+function getRGB(col) {
+    let R, G, B;
+    if (col.charAt(0)=='#') {
+        R = parseInt(col.substr( 1,2), 16);
+        G = parseInt(col.substr(3,2), 16);
+        B = parseInt(col.substr( 5,2), 16);
+    } else {
+        R = parseInt(col.substr( 0,3), 10);
+        G = parseInt(col.substr( 3,3), 10);
+        B = parseInt(col.substr( 6,3), 10);
+    }
+    return [R,G,B];
+}
+
 function colGrad(col, col2, grad) {
-    let R = parseInt(col.substr( 1,2), 16);
-    let G = parseInt(col.substr(3,2), 16);
-    let B = parseInt(col.substr( 5,2), 16);
-    let R2 = parseInt(col2.substr( 1,2), 16);
-    let G2 = parseInt(col2.substr( 3,2), 16);
-    let B2 = parseInt(col2.substr( 5,2), 16);
-    let RR = Math.floor(R*(1-grad)+R2*grad);
-    let GR = Math.floor(G*(1-grad)+G2*grad);
-    let BR = Math.floor(B*(1-grad)+B2*grad);
+    let RGB1 = getRGB(col);
+    let RGB2 = getRGB(col2);
+    let RR = Math.floor(RGB1[0]*(1-grad)+RGB2[0]*grad);
+    let GR = Math.floor(RGB1[1]*(1-grad)+RGB2[1]*grad);
+    let BR = Math.floor(RGB1[2]*(1-grad)+RGB2[2]*grad);
     return "#"+("0"+RR.toString(16)).slice(-2)+("0"+GR.toString(16)).slice(-2)+("0"+BR.toString(16)).slice(-2);
 }
 
@@ -120,21 +148,26 @@ function goTo(link) {
 }
 
 function drawBg(cont) {
-    cont.fillStyle = "#cfcfc0";
+    let fillStyles = ["#dfdfd0", "#ffdfd0", "#ffdff0"];
     for(let i =0;i<1000;i++) {
         let x = Math.random()*W;
         let y = Math.random()*H;
+        cont.fillStyle = fillStyles[Math.floor(Math.random()*3)];
         cont.beginPath();
+
         let rs = Math.random()*2;
+        if (Math.random()<0.02) {
+            rs = 1+Math.random()*2;
+        }
         cont.arc(x, y, rs, 0, Math.PI * 2, false);
         cont.fill();
     }
 
-    for(let rad=15;rad>2;rad--) {
+    for(let rad=20;rad>2;rad--) {
         cont.beginPath();
         cont.arc(W/2, H/2, rad, 0, Math.PI * 2, false);
         cont.strokeStyle="grey";
-        cont.fillStyle=colGrad("#ffe035", "#d0ff35",  rad/15);
+        cont.fillStyle=colGrad("236236086", "255255154",  rad/20);
         cont.lineWidth = 1;
         cont.fill();
     }
@@ -197,6 +230,7 @@ function draw(divEl, cont, psPar, canvasEl) {
             p.canvas = document.createElement("CANVAS");
             p.div.appendChild(p.canvas);
             p.divName = document.createElement("DIV");
+            nameDivs.push(p.divName);
             p.divName.classList.add("nameDiv");
             p.div.appendChild(p.divName);
             p.divName.innerHTML = p.name;
@@ -274,6 +308,23 @@ function orbitalMove() {
 
 }
 
+function names(id) {
+    namesOn = !namesOn;
+    let divClass;
+    if (namesOn) {
+        el(id).className = 'buttonDiv active';
+        divClass = 'nameDiv';
+    } else {
+        el(id).className = 'buttonDiv';
+        divClass = 'nameDiv hiddenDiv';
+    }
+    nameDivs.forEach(
+        function(divEl) {
+            divEl.className = divClass;
+        }
+    )
+}
+
 function el(id) {
     return document.getElementById(id);
 }
@@ -291,9 +342,9 @@ function start() {
     canvasEl = document.getElementById('cv1'),
     c2d = canvasEl.getContext('2d');
 
-    console.log(colGrad("#000000", "#A0FF0F", 0.5));
     // resize the canvas to fill browser window dynamically
     window.addEventListener('resize', resizeCanvas, false);
+
 
     resizeCanvas();
 }
